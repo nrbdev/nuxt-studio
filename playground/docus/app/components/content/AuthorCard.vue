@@ -1,5 +1,13 @@
 <script setup lang="ts">
-defineStudioMeta({
+interface AuthorCardProps {
+  cover?: string
+  badge?: string
+  note?: string
+  internal?: string
+  social?: { github?: string, avatar?: string }
+}
+
+defineStudioMeta<AuthorCardProps>({
   props: {
     cover: { label: 'Cover image', description: 'Displayed at the top of the card', input: 'media' },
     badge: { label: 'Badge icon', input: 'icon', iconLibraries: ['lucide'] },
@@ -19,13 +27,7 @@ defineStudioMeta({
   },
 })
 
-defineProps<{
-  cover?: string
-  badge?: string
-  note?: string
-  internal?: string
-  social?: { github?: string, avatar?: string }
-}>()
+defineProps<AuthorCardProps>()
 </script>
 
 <template>

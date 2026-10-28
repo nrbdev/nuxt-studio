@@ -2,17 +2,25 @@ import type { EditorOptions } from '@nuxt/content'
 import type { ComponentData } from 'nuxt-component-meta'
 import type { JSType } from 'untyped'
 
-export interface StudioPropMeta extends EditorOptions {
-  fields?: Record<string, StudioPropMeta>
+export interface StudioPropMeta<Value = unknown> extends EditorOptions {
+  fields?: StudioFieldsMeta<Value>
 }
+
+export type StudioFieldsMeta<Value = unknown> = unknown extends Value
+  ? Record<string, StudioPropMeta>
+  : Value extends readonly (infer Item)[]
+    ? StudioFieldsMeta<Item>
+    : Value extends object
+      ? { [Key in keyof Value]?: StudioPropMeta<NonNullable<Value[Key]>> }
+      : never
 
 export interface StudioSlotMeta {
   label?: string
   description?: string
 }
 
-export interface StudioComponentMeta {
-  props?: Record<string, StudioPropMeta>
+export interface StudioComponentMeta<Props = unknown> {
+  props?: StudioFieldsMeta<Props>
   slots?: Record<string, StudioSlotMeta>
 }
 
